@@ -6,3 +6,10 @@ services:
 
     IDCI\Bundle\SAMClientBundle\:
         resource: '../src/*'
+        exclude: '../../{Model}'
+
+    IDCI\Bundle\SAMClientBundle\Client\SAMApiClient:
+        arguments:
+            $clientId: '%idci_sam_client.client_id%'
+            $clientSecret: '%idci_sam_client.client_secret%'
+            $mode: '%idci_sam_client.mode%'

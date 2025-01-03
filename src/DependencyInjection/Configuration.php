@@ -2,6 +2,7 @@
 
 namespace IDCI\Bundle\SAMClientBundle\DependencyInjection;
 
+use IDCI\Bundle\SAMClientBundle\Client\SAMApiClient;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -13,7 +14,13 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder(self::CONFIGURATION_ROOT);
 
-        $treeBuilder->getRootNode();
+        $treeBuilder->getRootNode()
+            ->children()
+                ->scalarNode('client_id')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('client_secret')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('mode')->isRequired()->cannotBeEmpty()->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }
