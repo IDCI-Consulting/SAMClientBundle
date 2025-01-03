@@ -1,0 +1,16 @@
+{
+    "name": "idci/sam-client-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony bundle that provides an api client for SAM app (SAVInsight)",
+    "license": "MIT",
+    "require": {
+        "php": "^8.0",
+        "symfony/dependency-injection": "^6.0",
+        "symfony/http-kernel": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "IDCI\\Bundle\\SAMClientBundle\\": "src/"
+        }
+    }
+}
