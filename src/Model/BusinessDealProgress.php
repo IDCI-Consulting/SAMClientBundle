@@ -10,7 +10,7 @@ class BusinessDealProgress
     private ?string $workStartDate;
     private ?string $workEndDate;
     private ?string $deliveryDate;
-    private ?int $numberDaysWaitingParts
+    private ?int $numberDaysWaitingParts;
 
     public function getReceptionDate(): string
     {
