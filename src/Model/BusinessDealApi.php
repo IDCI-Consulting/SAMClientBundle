@@ -2,28 +2,46 @@
 
 namespace IDCI\Bundle\SAMClientBundle\Model;
 
-use IDCI\Bundle\SAMClientBundle\Model\BusinessDealProgress;
+use IDCI\Bundle\SAMClientBundle\Model\BusinessDealActivityApi;
+use IDCI\Bundle\SAMClientBundle\Model\BusinessDealCarrierApi;
+use IDCI\Bundle\SAMClientBundle\Model\BusinessDealContactApi;
+use IDCI\Bundle\SAMClientBundle\Model\BusinessDealDiagnosticApi;
+use IDCI\Bundle\SAMClientBundle\Model\BusinessDealEstimateApi;
+use IDCI\Bundle\SAMClientBundle\Model\BusinessDealReceiptApi;
 
-class BusinessDeal
+class BusinessDealApi
 {
-    private string $externalId;
-    private string $partnerReference;
-    private ?string $partnerSiteReference;
-    private ?string $initialRequestorPartnerSiteReference;
-    private ?string $initialRequestorPartnerReference;
-    private string $brandReference;
-    private ?string $invoicingCode;
+    private int $id;
     private ?string $internalNumber;
-    private ?string $productNature;
+    private ?string $externalId;
+    private CodeText $invoicingCode;
+    private CodeText $interventionCode;
+    private CodeText $competenceLevel;
+    private ?string $brandReference;
     private ?string $productReference;
     private ?string $productSerialNumber;
-    private ?string $externalNumber;
+    private CodeText $productNature;
     private ?string $batchReference;
     private ?string $movementSerialNumberReference;
     private ?string $movementReference;
-    private ?string $interventionCode;
-    private BusinessDealProgress $progress;
+    private ?string $partnerReference;
+    private CodeText $defectComponent;
+    private CodeText $defectReason;
+    private CodeText $customerDecision;
+    private ?string $expectedDelivery;
+    private ?string $expectedWorkshop;
     private ?string $accessCode;
+    private string $status;
+    private ?array $businessDealActivities;
+    private BusinessDealActivityApi $lastBusinessDealActivity;
+    private BusinessDealDiagnosticApi $lastDiagnostic;
+    private BusinessDealReceiptApi $lastReceipt;
+    private BusinessDealEstimateApi $lastEstimate;
+    private BusinessDealContactApi $contact;
+    private CodeText $handlingCode;
+    private CodeText $brandCertification;
+    private BusinessDealCarrierApi $outboundCarrier;
+    private ?string $initialRequestorPartnerSiteReference;
 
     public function getExternalId(): string
     {
@@ -32,7 +50,7 @@ class BusinessDeal
 
     public function setExternalId(string $externalId): self
     {
-        $this->externalId = $externalId;
+        $this->externelId = $externalId;
 
         return $this;
     }
@@ -49,40 +67,9 @@ class BusinessDeal
         return $this;
     }
 
-    public function getPartnerSiteReference(): ?string
-    {
-        return $this->partnerSiteReference;
-    }
-
-    public function setPartnerSiteReference(?string $partnerSiteReference): self
-    {
-        $this->partnerSiteReference = $partnerSiteReference;
-
-        return $this;
-    }
-
     public function getInitialRequestorPartnerSiteReference(): ?string
     {
         return $this->initialRequestorPartnerSiteReference;
-    }
-
-    public function setInitialRequestorPartnerSiteReference(?string $initialRequestorPartnerReference): self
-    {
-        $this->initialRequestorPartnerSiteReference = $initialRequestorPartnerSiteReference;
-
-        return $this;
-    }
-
-    public function getInitialRequestorPartnerReference(): ?string
-    {
-        return $this->initialRequestorPartnerReference;
-    }
-
-    public function setInitialRequestorPartnerReference(?string $initialRequestorPartnerReference): self
-    {
-        $this->initialRequestorPartnerReference = $initialRequestorPartnerReference;
-
-        return $this;
     }
 
     public function getBrandReference(): string
@@ -157,18 +144,6 @@ class BusinessDeal
         return $this;
     }
 
-    public function getExternalNumber(): ?string
-    {
-        return $this->externalNumber;
-    }
-
-    public function setExternalNumber(?string $externalNumber): self
-    {
-        $this->externalNumber = $externalNumber;
-
-        return $this;
-    }
-
     public function getBatchReference(): ?string
     {
         return $this->batchReference;
@@ -217,18 +192,6 @@ class BusinessDeal
         return $this;
     }
 
-    public function getProgress(): BusinessDealProgress
-    {
-        return $this->progress;
-    }
-
-    public function setProgress(BusinessDealProgress $progress): self
-    {
-        $this->progress = $progress;
-
-        return $this;
-    }
-
     public function getAccessCode(): ?string
     {
         return $this->accessCode;
@@ -241,3 +204,4 @@ class BusinessDeal
         return $this;
     }
 }
+

@@ -5,7 +5,7 @@ namespace IDCI\Bundle\SAMClientBundle\Model;
 class BusinessDealPayload
 {
     private int $id;
-    private string $internalNumber;
+    private ?string $internalNumber;
 
     public function getId(): int
     {
@@ -19,12 +19,12 @@ class BusinessDealPayload
         return $this;
     }
 
-    public function getInternalNumber(): string
+    public function getInternalNumber(): ?string
     {
         return $this->internalNumber;
     }
 
-    public function setInternalNumber(string $internalNumber): self
+    public function setInternalNumber(?string $internalNumber): self
     {
         $this->internalNumber = $internalNumber;
 
