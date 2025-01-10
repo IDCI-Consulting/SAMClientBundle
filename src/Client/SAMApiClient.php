@@ -2,38 +2,46 @@
 
 namespace IDCI\Bundle\SAMClientBundle\Client;
 
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Response;
 use IDCI\Bundle\SAMClientBundle\Model\BusinessDeal;
+use IDCI\Bundle\SAMClientBundle\Model\BusinessDealPayload;
+use IDCI\Bundle\SAMClientBundle\Model\BusinessDealProgress;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SAMApiClient
 {
     public const MODE_STAGING = 'staging';
     public const MODE_LIVE = 'live';
 
-    private HttpClientInterface $httpClient;
     private LoggerInterface $logger;
     private AdapterInterface $cache;
+    private ?ClientInterface $samApiClient = null;
     private string $clientId;
     private string $clientSecret;
     private string $mode;
 
     public function __construct(
-        HttpClientInterface $httpClient,
         LoggerInterface $logger,
         AdapterInterface $cache,
         string $clientId,
         string $clientSecret,
         string $mode
     ) {
-        $this->httpClient = $httpClient;
         $this->logger = $logger;
         $this->cache = $cache;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->mode = $mode;
+    }
+
+    public function setHttpClient(ClientInterface $samApiClient)
+    {
+        $this->samApiClient = $samApiClient;
     }
 
     public function getAccessTokenUrl(): string
@@ -51,41 +59,24 @@ class SAMApiClient
         return self::MODE_LIVE === $this->mode ? 'https://savinsight.eu.auth0.com/oauth/token' : 'https://savinsight-staging.eu.auth0.com/oauth/token';
     }
 
-    public function getApiBaseUrl(): string
-    {
-        if (!in_array($this->mode, [self::MODE_LIVE, self::MODE_STAGING])) {
-            $this->logger->warning(
-                sprintf(
-                    'The mode "%s" is not supported, allowed values: %s. Fallback to staging mode.',
-                    $this->mode,
-                    join(', ', [self::MODE_LIVE, self::MODE_STAGING])
-                )
-            );
-        }
-
-        return self::MODE_LIVE === $this->mode ? 'https://sam.savinsight.com' : 'https://sam-staging.savinsight.com';
-    }
-
     private function getAccessTokenCacheKey(): string
     {
         return 'idci_sam_client.access_token';
     }
 
-    public function getAccessTokenResponse(): ?ResponseInterface
+    public function getAccessTokenResponse(): ?Response
     {
         $response = null;
 
         try {
-            $response = $this->httpClient->request('POST', $this->getAccessTokenUrl(), [
+            $response = $this->samApiClient->post($this->getAccessTokenUrl(), [
                 'json' => [
                     'audience' => 'https://api.sam.savinsight.com',
                     'grant_type' => 'client_credentials',
                     'client_id' => $this->clientId,
                     'client_secret' => $this->clientSecret,
-                ]
+                ],
             ]);
-
-            $response->getContent();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
         }
@@ -107,64 +98,342 @@ class SAMApiClient
             throw new \Exception('Could not retrieve access token');
         }
 
-        $accessToken = json_decode($response->getContent(), true);
+        $accessToken = json_decode((string) $response->getBody(), true);
 
         $item = $this->cache->getItem($this->getAccessTokenCacheKey());
-        $item->set($response->getContent());
+        $item->set((string) $response->getBody());
         $item->expiresAfter($accessToken['expires_in']);
         $this->cache->save($item);
 
         return $accessToken;
     }
 
-    public function createActivity(string $id, string $activityCode, array $options)
+    public function configureStartActivityInput(OptionsResolver $resolver): void
     {
-        // POST /api/BusinessDeals/{id}/activities/{activityCode}
+        $resolver
+            ->setDefined('employeeCode')->setAllowedTypes('employeeCode', ['string', 'null'])
+            ->setDefined('date')->setAllowedTypes('date', ['string', \DateTime::class, 'null'])->setNormalizer('date', function (Options $options, $value) {
+                if ($value instanceof \DateTime) {
+                    return $value->format('Y-m-d H:i:s.v');
+                }
+
+                return $value;
+            })
+        ;
+    }
+
+    public function createActivity(int $id, string $activityCode, array $options): ?ActivityUpdatedApi
+    {
+        $resolver = new OptionsResolver();
+        $this->configureStartActivityInput($resolver);
+        $resolvedOptions = $resolver->resolve($options);
+
+        try {
+            $response = $this->samApiClient->post(sprintf('BusinessDeals/%s/activities/%s', $id, $activityCode), [
+                'headers' => [
+                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($resolvedOptions),
+            ]);
+
+            return $this->createModelFromData(ActivityUpdatedApi::class, json_decode((string) $response->getBody(), true));
+        } catch (RequestException $e) {
+            $this->logRequestException($e, $resolvedOptions);
+        }
+
+        return null;
+    }
+
+    public function configureUpdateActivityInput(OptionsResolver $resolver): void
+    {
+        $resolver
+            ->setDefined('status')->setAllowedValues('status', ['paused', 'started', 'terminated'])
+            ->setDefined('employeeCode')->setAllowedTypes('employeeCode', ['string', 'null'])
+            ->setDefined('date')->setAllowedTypes('date', ['string', \DateTimeInterface::class, 'null'])->setNormalizer('date', function (Options $options, $value) {
+                if ($value instanceof \DateTimeInterface) {
+                    return $value->format('Y-m-d H:i:s.v');
+                }
+
+                return $value;
+            })
+        ;
     }
 
     public function updateActivity(string $id, string $activityCode, array $options)
     {
-        // PUT /api/BusinessDeals/{id}/activities/{activityCode}
+        $resolver = new OptionsResolver();
+        $this->configureUpdateActivityInput($resolver);
+        $resolvedOptions = $resolver->resolve($options);
+
+        try {
+            $response = $this->samApiClient->put(sprintf('BusinessDeals/%s/activities/%s', $id, $activityCode), [
+                'headers' => [
+                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($resolvedOptions),
+            ]);
+
+            return $this->createModelFromData(ActivityUpdatedApi::class, json_decode((string) $response->getBody(), true));
+        } catch (RequestException $e) {
+            $this->logRequestException($e, $resolvedOptions);
+
+            return null;
+        }
     }
 
-    public function createActivityByInternalNumber(string $internalNumber, string $activityCode, array $options)
+    public function createActivityByInternalNumber(string $internalNumber, string $activityCode, array $options): ?BusinessDealPayload
     {
-        // POST /api/BusinessDeals/ByInternalNumber/{internalNumber}/activities/{activityCode}
+        $resolver = new OptionsResolver();
+        $this->configureStartActivityInput($resolver);
+        $resolvedOptions = $resolver->resolve($options);
+
+        try {
+            $response = $this->samApiClient->post(sprintf('BusinessDeals/ByInternalNumber/%s/activities/%s', $internalNumber, $activityCode), [
+                'headers' => [
+                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($resolvedOptions),
+            ]);
+
+            return $this->createModelFromData(ActivityUpdatedApi::class, json_decode((string) $response->getBody(), true));
+        } catch (RequestException $e) {
+            $this->logRequestException($e, $resolvedOptions);
+
+            return null;
+        }
     }
 
     public function updateActivityByInternalNumber(string $internalNumber, string $activityCode, array $options)
     {
-        // PUT /api/BusinessDeals/ByInternalNumber/{internalNumber}/activities/{activityCode}
+        $resolver = new OptionsResolver();
+        $this->configureUpdateActivityInput($resolver);
+        $resolvedOptions = $resolver->resolve($options);
+
+        try {
+            $response = $this->samApiClient->put(sprintf('BusinessDeals/ByInternalNumber/%s/activities/%s', $internalNumber, $activityCode), [
+                'headers' => [
+                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($resolvedOptions),
+            ]);
+
+            return $this->createModelFromData(ActivityUpdatedApi::class, json_decode((string) $response->getBody(), true));
+        } catch (RequestException $e) {
+            $this->logRequestException($e, $resolvedOptions);
+
+            return null;
+        }
     }
 
     public function createActivityByExternalId(string $externalId, string $activityCode, array $options)
     {
-        // POST /api/BusinessDeals/ByExternalId/{externalId}/activities/{activityCode}
+        $resolver = new OptionsResolver();
+        $this->configureStartActivityInput($resolver);
+        $resolvedOptions = $resolver->resolve($options);
+
+        try {
+            $response = $this->samApiClient->post(sprintf('BusinessDeals/ByExternalId/%s/activities/%s', $externalId, $activityCode), [
+                'headers' => [
+                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($resolvedOptions),
+            ]);
+
+            return $this->createModelFromData(ActivityUpdatedApi::class, json_decode((string) $response->getBody(), true));
+        } catch (RequestException $e) {
+            $this->logRequestException($e, $resolvedOptions);
+
+            return null;
+        }
     }
 
     public function updateActivityByExternalId(string $externalId, string $activityCode, array $options)
     {
-        // PUT /api/BusinessDeals/ByExternalId/{externalId}/activities/{activityCode}
+        $resolver = new OptionsResolver();
+        $this->configureUpdateActivityInput($resolver);
+        $resolvedOptions = $resolver->resolve($options);
+
+        try {
+            $response = $this->samApiClient->put(sprintf('BusinessDeals/ByExternalId/%s/activities/%s', $externalId, $activityCode), [
+                'headers' => [
+                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($resolvedOptions),
+            ]);
+
+            return $this->createModelFromData(ActivityUpdatedApi::class, json_decode((string) $response->getBody(), true));
+        } catch (RequestException $e) {
+            $this->logRequestException($e, $resolvedOptions);
+
+            return null;
+        }
+    }
+
+    public function configureCreateDiagnosticInput(OptionsResolver $resolver): void
+    {
+        $resolver
+            ->setDefined('date')->setAllowedTypes('date', ['string', \DateTimeInterface::class, 'null'])->setNormalizer('date', function (Options $options, $value) {
+                if ($value instanceof \DateTimeInterface) {
+                    return $value->format('Y-m-d H:i:s.v');
+                }
+
+                return $value;
+            })
+            ->setDefined('watchStates')->setAllowedTypes('watchStates', ['array', 'null'])
+            ->setDefined('operations')->setAllowedTypes('operations', ['array', 'null'])
+        ;
     }
 
     public function createDiagnostics(string $id, array $options)
     {
-        // POST /api/BusinessDeals/{id}/diagnostics
+        $resolver = new OptionsResolver();
+        $this->configureCreateDiagnosticInput($resolver);
+        $resolvedOptions = $resolver->resolve($options);
+
+        try {
+            $response = $this->samApiClient->post(sprintf('BusinessDeals/%s/diagnotics', $id), [
+                'headers' => [
+                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($resolvedOptions),
+            ]);
+
+            return $this->createModelFromData(ActivityUpdatedApi::class, json_decode((string) $response->getBody(), true));
+        } catch (RequestException $e) {
+            $this->logRequestException($e, $resolvedOptions);
+
+            return null;
+        }
+    }
+
+    public function configureCreateDiagnosticsByInternalNumber(OptionsResolver $resolver): void
+    {
+        $resolver
+            ->setDefined('date')->setAllowedTypes('date', ['string', \DateTime::class, 'null'])->setNormalizer('date', function (Options $options, $value) {
+                if ($value instanceof \DateTime) {
+                    return $value->format('Y-m-d H:i:s.v');
+                }
+
+                return $value;
+            })
+            ->setDefined('watchStates')->setAllowedTypes('watchStates', ['array', 'null'])
+            ->setDefined('operations')->setAllowedTypes('operations', ['array', 'null'])
+        ;
     }
 
     public function createDiagnosticsByInternalNumber(string $internalNumber, array $options)
     {
-        // POST /api/BusinessDeals/ByInternalNumber/{internalNumber}/diagnostics
+        $resolver = new OptionsResolver();
+        $this->configureCreateActivity($resolver);
+        $resolvedOptions = $resolver->resolve($options);
+
+        try {
+            $response = $this->samApiClient->post(sprintf('BusinessDeals/ByInternalNumber/%s/diagnotics', $internalNumber), [
+                'headers' => [
+                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($resolvedOptions),
+            ]);
+
+            return $response;
+        } catch (RequestException $e) {
+            $this->logger->error(null != $e->getResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage());
+
+            return null;
+        }
+    }
+
+    public function configureCreateDiagnosticsByExternalId(OptionsResolver $resolver): void
+    {
+        $resolver
+            ->setDefined('date')->setAllowedTypes('date', ['string', \DateTime::class, 'null'])->setNormalizer('date', function (Options $options, $value) {
+                if ($value instanceof \DateTime) {
+                    return $value->format('Y-m-d H:i:s.v');
+                }
+
+                return $value;
+            })
+            ->setDefined('watchStates')->setAllowedTypes('watchStates', ['array', 'null'])
+            ->setDefined('operations')->setAllowedTypes('operations', ['array', 'null'])
+        ;
     }
 
     public function createDiagnosticsByExternalId(string $externalId, array $options)
     {
-        // POST /api/BusinessDeals/ByExternalId/{externalId}/diagnostics
+        $resolver = new OptionsResolver();
+        $this->configureCreateActivity($resolver);
+        $resolvedOptions = $resolver->resolve($options);
+
+        try {
+            $response = $this->samApiClient->post(sprintf('BusinessDeals/ByExternalId/%s/diagnotics', $externalId), [
+                'headers' => [
+                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($resolvedOptions),
+            ]);
+
+            return $response;
+        } catch (RequestException $e) {
+            $this->logger->error(null != $e->getResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage());
+
+            return null;
+        }
     }
 
-    public function createBusinessDeal(array $options)
+    public function configureCreateBusinessDeal(OptionsResolver $resolver): void
     {
-        // POST /api/BusinessDeals/ByExternalId/{externalId}/diagnostics
+        $resolver
+            ->setRequired('externalId')->setAllowedTypes('externalId', ['string'])
+            ->setRequired('partnerReference')->setAllowedTypes('partnerReference', ['string'])
+            ->setRequired('brandReference')->setAllowedTypes('brandReference', ['string'])
+            ->setDefined('partnerSiteReference')->setAllowedTypes('partnerSiteReference', ['string', 'null'])
+            ->setDefined('initialRequestorPartnerSiteReference')->setAllowedTypes('initialRequestorPartnerSiteReference', ['string', 'null'])
+            ->setDefined('initialRequestorPartnerReference')->setAllowedTypes('initialRequestorPartnerReference', ['string', 'null'])
+            ->setDefined('invoicingCode')->setAllowedTypes('invoicingCode', ['string', 'null'])
+            ->setDefined('internalNumber')->setAllowedTypes('internalNumber', ['string', 'null'])
+            ->setDefined('productNature')->setAllowedTypes('productNature', ['string', 'null'])
+            ->setDefined('productReference')->setAllowedTypes('productReference', ['string', 'null'])
+            ->setDefined('productSerialNumber')->setAllowedTypes('productSerialNumber', ['string', 'null'])
+            ->setDefined('externalNumber')->setAllowedTypes('externalNumber', ['string', 'null'])
+            ->setDefined('batchReference')->setAllowedTypes('batchReference', ['string', 'null'])
+            ->setDefined('movementSerialNumberReference')->setAllowedTypes('movementSerialNumberReference', ['string', 'null'])
+            ->setDefined('movementReference')->setAllowedTypes('movementReference', ['string', 'null'])
+            ->setDefined('interventionCode')->setAllowedTypes('interventionCode', ['string', 'null'])
+            ->setDefined('progress')->setAllowedTypes('progress', [BusinessDealProgress::class, 'array'])
+            ->setDefined('accessCode')->setAllowedTypes('accessCode', ['string', 'null'])
+        ;
+    }
+
+    public function createBusinessDeal(array $options): ?BusinessDealPayload
+    {
+        $resolver = new OptionsResolver();
+        $this->configureCreateBusinessDeal($resolver);
+        $resolvedOptions = $resolver->resolve($options);
+
+        try {
+            $response = $this->samApiClient->post('BusinessDeals', [
+                'headers' => [
+                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($resolvedOptions),
+            ]);
+
+            return $this->createModelFromData(BusinessDealPayload::class, json_decode((string) $response->getBody(), true));
+        } catch (RequestException $e) {
+            $this->logRequestException($e, $resolvedOptions);
+
+            return null;
+        }
     }
 
     public function importBusinessDeal(string $importDataTemplateId)
@@ -182,20 +451,20 @@ class SAMApiClient
         $response = null;
 
         try {
-            $response = $this->httpClient->request('GET', sprintf('%s/api/BusinessDeals/%s', $this->getApiBaseUrl(), $id), [
+            $response = $this->samApiClient->get(sprintf('BusinessDeals/%s', $id), [
                 'headers' => [
-                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token'])
-                ],
+                    'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
+                ]
             ]);
-
-            $response->getContent();
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+        } catch (RequestException $e) {
+            $this->logger->error(null != $e->getResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage());
 
             return null;
         }
 
-        return $this->createModelFromData(BusinessDeal::class, $response->toArray());
+        dd(json_decode((string) $response->getBody(), true));
+
+        return $this->createModelFromData(BusinessDealApi::class, json_decode((string) $response->getBody(), true));
     }
 
     public function updateBusinessDeal(string $id, array $options)
@@ -251,10 +520,25 @@ class SAMApiClient
             }
 
             $property = $reflectionClass->getProperty($attribute);
+            // verifier la class, si non objet : rien, sinon rappeler la methode
             $property->setAccessible(true);
             $property->setValue($modelObject, $value);
         }
 
         return $modelObject;
+    }
+
+    private function logRequestException(RequestException $e, array $options = []): void
+    {
+        $this->logger->error(
+            sprintf(
+                'method : %s, url : %s, status : %s, data : %s, message : %s',
+                $e->getRequest()->getMethod(),
+                $e->getRequest()->getUri(),
+                null != $e->getResponse() ? (string) $e->getResponse()->getStatusCode() : null,
+                json_encode($options),
+                null != $e->getResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage()
+            )
+        );
     }
 }
