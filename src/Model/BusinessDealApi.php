@@ -35,13 +35,13 @@ class BusinessDealApi
     private string $status;
     private ?array $businessDealActivities;
     private BusinessDealActivityApi $lastBusinessDealActivity;
-    private BusinessDealDiagnosticApi $lastDiagnostic;
-    private BusinessDealReceiptApi $lastReceipt;
-    private BusinessDealEstimateApi $lastEstimate;
-    private BusinessDealContactApi $contact;
-    private CodeText $handlingCode;
-    private CodeText $brandCertification;
-    private BusinessDealCarrierApi $outboundCarrier;
+    private ?BusinessDealDiagnosticApi $lastDiagnostic;
+    private ?BusinessDealReceiptApi $lastReceipt;
+    private ?BusinessDealEstimateApi $lastEstimate;
+    private ?BusinessDealContactApi $contact;
+    private ?CodeText $handlingCode;
+    private ?CodeText $brandCertification;
+    private ?BusinessDealCarrierApi $outboundCarrier;
     private ?string $initialRequestorPartnerSiteReference;
 
     public function __construct(?array $businessDealActivities)
@@ -289,7 +289,7 @@ class BusinessDealApi
         return $this;
     }
 
-    public getStatus(): string
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -313,84 +313,89 @@ class BusinessDealApi
         return $this;
     }
 
-    public function getLastDiagnostic(): BusinessDealDiagnosticApi
+    public function getLastDiagnostic(): ?BusinessDealDiagnosticApi
     {
         return $this->lastDiagnostic;
     }
 
-    public function setLastDiagnostic(BusinessDealDiagnosticApi $lastDiagnostic): self
+    public function setLastDiagnostic(?BusinessDealDiagnosticApi $lastDiagnostic): self
     {
         $this->lastDiagnostic = $lastDiagnostic;
 
         return $this;
     }
 
-    public function getLastReceipt(): BusinessDealReceiptApi
+    public function getLastReceipt(): ?BusinessDealReceiptApi
     {
         return $this->lastReceipt;
     }
 
-    public function setLastReceipt(BusinessDealReceiptApi $lastReceipt): self
+    public function setLastReceipt(?BusinessDealReceiptApi $lastReceipt): self
     {
         $this->lastReceipt = $lastReceipt;
 
         return $this;
     }
 
-    public function getLastEstimate(): BusinessDealEstimateApi
+    public function getLastEstimate(): ?BusinessDealEstimateApi
     {
         return $this->lastEstimate;
     }
 
-    public function setLastEstimate(BusinessDealEstimateApi $lastEstimate): self
+    public function setLastEstimate(?BusinessDealEstimateApi $lastEstimate): self
     {
         $this->lastEstimate = $lastEstimate;
 
         return $this;
     }
 
-    public function getContact(): BusinessDealContactApi
+    public function getContact(): ?BusinessDealContactApi
     {
         return $this->contact;
     }
 
-    public function setContact(BusinessDealContactApi $contact): self
+    public function setContact(?BusinessDealContactApi $contact): self
     {
         $this->contact = $contact;
 
         return $this;
     }
 
-    public function getHandlingCode(): CodeText
+    public function getHandlingCode(): ?CodeText
     {
         return $this->handlingCode;
     }
 
-    public function setHandlingCode(CodeText $handlingCode): self
+    public function setHandlingCode(?CodeText $handlingCode): self
     {
         $this->handlingCode = $handlingCode;
 
         return $this;
     }
 
-    public function getBrandCertification(): CodeText
+    public function getBrandCertification(): ?CodeText
     {
         return $this->brandCertification;
     }
 
-    public function setBrandCertification(CodeText $brandCertification): self
+    public function setBrandCertification(?CodeText $brandCertification): self
     {
         $this->brandCertification = $brandCertification;
 
         return $this;
     }
 
-    public function getOutboundCarrier(): BusinessDealCarrierApi
+    public function getOutboundCarrier(): ?BusinessDealCarrierApi
     {
         return $this->outboundCarrier;
     }
 
-    public function setOutboundCarrier(BusinessDealCarrier)
+    public function setOutboundCarrier(?BusinessDealCarrier $outboundCarrier): self
+    {
+        $this->outboundCarrier = $outboundCarrier;
+
+        return $this;
+    }
 
     public function getInitialRequestorPartnerSiteReference(): ?string
     {
@@ -404,4 +409,3 @@ class BusinessDealApi
         return $this;
     }
 }
-
