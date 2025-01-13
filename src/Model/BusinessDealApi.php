@@ -35,6 +35,7 @@ class BusinessDealApi
     private string $status;
     private ?array $businessDealActivities;
     private BusinessDealActivityApi $lastBusinessDealActivity;
+<<<<<<< HEAD
     private BusinessDealDiagnosticApi $lastDiagnostic;
     private BusinessDealReceiptApi $lastReceipt;
     private BusinessDealEstimateApi $lastEstimate;
@@ -42,6 +43,15 @@ class BusinessDealApi
     private CodeText $handlingCode;
     private CodeText $brandCertification;
     private BusinessDealCarrierApi $outboundCarrier;
+=======
+    private ?BusinessDealDiagnosticApi $lastDiagnostic;
+    private ?BusinessDealReceiptApi $lastReceipt;
+    private ?BusinessDealEstimateApi $lastEstimate;
+    private ?BusinessDealContactApi $contact;
+    private ?CodeText $handlingCode;
+    private ?CodeText $brandCertification;
+    private ?BusinessDealCarrierApi $outboundCarrier;
+>>>>>>> 73e0d5c (Add api call)
     private ?string $initialRequestorPartnerSiteReference;
 
     public function __construct(?array $businessDealActivities)
@@ -289,14 +299,22 @@ class BusinessDealApi
         return $this;
     }
 
+<<<<<<< HEAD
     public getStatus(): string
+=======
+    public function getStatus(): string
+>>>>>>> 73e0d5c (Add api call)
     {
         return $this->status;
     }
 
     public function setStatus(string $status): self
     {
+<<<<<<< HEAD
         $this->status = $status:
+=======
+        $this->status = $status;
+>>>>>>> 73e0d5c (Add api call)
 
         return $this;
     }
@@ -313,84 +331,145 @@ class BusinessDealApi
         return $this;
     }
 
+<<<<<<< HEAD
     public function getLastDiagnostic(): BusinessDealDiagnosticApi
+=======
+    public function getLastDiagnostic(): ?BusinessDealDiagnosticApi
+>>>>>>> 73e0d5c (Add api call)
     {
         return $this->lastDiagnostic;
     }
 
+<<<<<<< HEAD
     public function setLastDiagnostic(BusinessDealDiagnosticApi $lastDiagnostic): self
+=======
+    public function setLastDiagnostic(?BusinessDealDiagnosticApi $lastDiagnostic): self
+>>>>>>> 73e0d5c (Add api call)
     {
         $this->lastDiagnostic = $lastDiagnostic;
 
         return $this;
     }
 
+<<<<<<< HEAD
     public function getLastReceipt(): BusinessDealReceiptApi
+=======
+    public function getLastReceipt(): ?BusinessDealReceiptApi
+>>>>>>> 73e0d5c (Add api call)
     {
         return $this->lastReceipt;
     }
 
+<<<<<<< HEAD
     public function setLastReceipt(BusinessDealReceiptApi $lastReceipt): self
+=======
+    public function setLastReceipt(?BusinessDealReceiptApi $lastReceipt): self
+>>>>>>> 73e0d5c (Add api call)
     {
         $this->lastReceipt = $lastReceipt;
 
         return $this;
     }
 
+<<<<<<< HEAD
     public function getLastEstimate(): BusinessDealEstimateApi
+=======
+    public function getLastEstimate(): ?BusinessDealEstimateApi
+>>>>>>> 73e0d5c (Add api call)
     {
         return $this->lastEstimate;
     }
 
+<<<<<<< HEAD
     public function setLastEstimate(BusinessDealEstimateApi $lastEstimate): self
+=======
+    public function setLastEstimate(?BusinessDealEstimateApi $lastEstimate): self
+>>>>>>> 73e0d5c (Add api call)
     {
         $this->lastEstimate = $lastEstimate;
 
         return $this;
     }
 
+<<<<<<< HEAD
     public function getContact(): BusinessDealContactApi
+=======
+    public function getContact(): ?BusinessDealContactApi
+>>>>>>> 73e0d5c (Add api call)
     {
         return $this->contact;
     }
 
+<<<<<<< HEAD
     public function setContact(BusinessDealContactApi $contact): self
+=======
+    public function setContact(?BusinessDealContactApi $contact): self
+>>>>>>> 73e0d5c (Add api call)
     {
         $this->contact = $contact;
 
         return $this;
     }
 
+<<<<<<< HEAD
     public function getHandlingCode(): CodeText
+=======
+    public function getHandlingCode(): ?CodeText
+>>>>>>> 73e0d5c (Add api call)
     {
         return $this->handlingCode;
     }
 
+<<<<<<< HEAD
     public function setHandlingCode(CodeText $handlingCode): self
+=======
+    public function setHandlingCode(?CodeText $handlingCode): self
+>>>>>>> 73e0d5c (Add api call)
     {
         $this->handlingCode = $handlingCode;
 
         return $this;
     }
 
+<<<<<<< HEAD
     public function getBrandCertification(): CodeText
+=======
+    public function getBrandCertification(): ?CodeText
+>>>>>>> 73e0d5c (Add api call)
     {
         return $this->brandCertification;
     }
 
+<<<<<<< HEAD
     public function setBrandCertification(CodeText $brandCertification): self
+=======
+    public function setBrandCertification(?CodeText $brandCertification): self
+>>>>>>> 73e0d5c (Add api call)
     {
         $this->brandCertification = $brandCertification;
 
         return $this;
     }
 
+<<<<<<< HEAD
     public function getOutboundCarrier(): BusinessDealCarrierApi
+=======
+    public function getOutboundCarrier(): ?BusinessDealCarrierApi
+>>>>>>> 73e0d5c (Add api call)
     {
         return $this->outboundCarrier;
     }
 
+<<<<<<< HEAD
     public function setOutboundCarrier(BusinessDealCarrier)
+=======
+    public function setOutboundCarrier(?BusinessDealCarrier $outboundCarrier): self
+    {
+        $this->outboundCarrier = $outboundCarrier;
+
+        return $this;
+    }
+>>>>>>> 73e0d5c (Add api call)
 
     public function getInitialRequestorPartnerSiteReference(): ?string
     {

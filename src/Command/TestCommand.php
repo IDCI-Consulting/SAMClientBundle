@@ -3,6 +3,7 @@
 namespace IDCI\Bundle\SAMClientBundle\Command;
 
 use IDCI\Bundle\SAMClientBundle\Client\SAMApiClient;
+use IDCI\Bundle\SAMClientBundle\Model\BusinessDealProgress;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,13 +39,17 @@ class TestCommand extends Command
     {
         // id : 20277
         try {
-            $samResponse = $this->client->getBusinessDeal(20277);
+            // $samResponse = $this->client->getBusinessDeal(20277);
 
-            // $samResponse = $this->client->createBusinessDeal([
-            //     'externalId' => $input->getArgument('externalId'),
-            //     'partnerReference' => $input->getArgument('partnerReference'),
-            //     'brandReference' => $input->getArgument('brandReference'),
-            //     'internalNumber' => $input->getOption('internal-number')
+            $samResponse = $this->client->createBusinessDeal([
+                'externalId' => 'Test2',
+                'partnerReference' => 'FR center',
+                'brandReference' => 'Brand 002'
+                // 'progress' => (new BusinessDealProgress())->setReceptionDate('2024-01-01')
+            ]);
+
+            // $samResponse = $this->client->updateActivityByInternalNumber('testId', 'A020', [
+            //     'status' => 'started'
             // ]);
 
             dd($samResponse);
