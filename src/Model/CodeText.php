@@ -19,12 +19,12 @@ class CodeText
         return $this;
     }
 
-    public function setText(): ?string
+    public function getText(): ?string
     {
         return $this->text;
     }
 
-    public function getText(?string $text): self
+    public function setText(?string $text): self
     {
         $this->text = $text;
 
