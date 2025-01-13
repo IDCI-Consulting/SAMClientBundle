@@ -2,13 +2,26 @@
     "name": "idci/sam-client-bundle",
     "type": "symfony-bundle",
     "description": "Symfony bundle that provides an api client for SAM app (SAVInsight)",
+    "authors": [
+        {
+            "name": "Benjamin Boudier",
+            "email": "benjamin.boudier@idci-consulting.fr"
+        },
+        {
+            "name": "Maëva GRONDIN",
+            "email": "maeva.grondin@idci-consulting.fr"
+        }
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.0",
         "symfony/cache": "^6.0",
+        "symfony/console": "^6.0",
         "symfony/dependency-injection": "^6.0",
-        "symfony/http-client": "^6.0",
-        "symfony/http-kernel": "^6.0"
+        "symfony/http-kernel": "^6.0",
+        "symfony/serializer-pack": "^1.0",
+        "eightpoints/guzzle-bundle": "^8.0",
+        "psr/log": "^1|^2|^3"
     },
     "autoload": {
         "psr-4": {
