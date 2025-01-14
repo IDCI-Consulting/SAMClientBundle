@@ -2,8 +2,6 @@
 
 namespace IDCI\Bundle\SAMClientBundle\Model;
 
-use IDCI\Bundle\SAMClientBundle\Model\CodeText;
-
 class BusinessDealEstimateApi
 {
     private int $id;

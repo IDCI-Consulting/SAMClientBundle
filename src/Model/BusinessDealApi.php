@@ -80,7 +80,7 @@ class BusinessDealApi
 
     public function setExternalId(?string $externalId): self
     {
-        $this->externelId = $externalId;
+        $this->externalId = $externalId;
 
         return $this;
     }
@@ -296,7 +296,7 @@ class BusinessDealApi
 
     public function setStatus(string $status): self
     {
-        $this->status = $status:
+        $this->status = $status;
 
         return $this;
     }

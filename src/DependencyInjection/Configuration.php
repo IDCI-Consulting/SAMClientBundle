@@ -2,7 +2,6 @@
 
 namespace IDCI\Bundle\SAMClientBundle\DependencyInjection;
 
-use IDCI\Bundle\SAMClientBundle\Client\SAMApiClient;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 

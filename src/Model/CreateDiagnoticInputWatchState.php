@@ -2,12 +2,14 @@
 
 namespace IDCI\Bundle\SAMClientBundle\Model;
 
+use IDCI\Bundle\SAMClientBundle\Model\Enum\CreateDiagnosticInputWatchStateProductState;
+
 class CreateDiagnosticInputWatchState
 {
     private bool $printOnEstimate;
     private ?string $internalComment;
     private ?string $materialReference;
-    private ?string $productState;
+    private CreateDiagnosticInputWatchStateProductState $productState;
 
     public function getPrintOnEstimate(): bool
     {
@@ -45,12 +47,12 @@ class CreateDiagnosticInputWatchState
         return $this;
     }
 
-    public function getProductState(): string
+    public function getProductState(): CreateDiagnosticInputWatchStateProductState
     {
         return $this->productState;
     }
 
-    public function setProductState(string $productState): self
+    public function setProductState(CreateDiagnosticInputWatchStateProductState $productState): self
     {
         $this->productState = $productState;
 

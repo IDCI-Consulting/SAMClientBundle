@@ -2,8 +2,6 @@
 
 namespace IDCI\Bundle\SAMClientBundle\Model;
 
-use IDCI\Bundle\SAMClientBundle\Model\BusinessDealProgress;
-
 class BusinessDeal
 {
     private string $externalId;
