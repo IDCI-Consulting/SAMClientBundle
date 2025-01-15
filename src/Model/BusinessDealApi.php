@@ -9,6 +9,7 @@ use IDCI\Bundle\SAMClientBundle\Model\BusinessDealDiagnosticApi;
 use IDCI\Bundle\SAMClientBundle\Model\BusinessDealEstimateApi;
 use IDCI\Bundle\SAMClientBundle\Model\BusinessDealReceiptApi;
 use IDCI\Bundle\SAMClientBundle\Model\CodeText;
+use IDCI\Bundle\SAMClientBundle\Model\Enum\BusinessDealApiStatus;
 
 class BusinessDealApi
 {
@@ -32,7 +33,7 @@ class BusinessDealApi
     private ?string $expectedDelivery;
     private ?string $expectedWorkshop;
     private ?string $accessCode;
-    private string $status;
+    private BusinessDealApiStatus $status;
     private ?array $businessDealActivities;
     private BusinessDealActivityApi $lastBusinessDealActivity;
     private ?BusinessDealDiagnosticApi $lastDiagnostic;
@@ -289,16 +290,21 @@ class BusinessDealApi
         return $this;
     }
 
-    public function getStatus(): string
+    public function getStatus(): BusinessDealApiStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(BusinessDealApiStatus $status): self
     {
         $this->status = $status;
 
         return $this;
+    }
+
+    public function getBusinessDealActivities(): ?array
+    {
+        return $this->businessDealActivities;
     }
 
     public function getLastBusinessDealActivity(): BusinessDealActivityApi
