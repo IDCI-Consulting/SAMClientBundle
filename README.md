@@ -4,7 +4,7 @@ Symfony bundle that provides an api client for SAM app (SAVInsight)
 
 ## Installation
 
-Install this bundle using composer:
+Install this bundle using composer :
 
 ```sh
 composer require idci/sam-client-bundle
@@ -14,7 +14,7 @@ composer require idci/sam-client-bundle
 
 ### Create an Eightpoint Guzzle HTTP client
 
-In the file `config/packages/eight_points_guzzle.yaml` create a **SAM API** client:
+In the file `config/packages/eight_points_guzzle.yaml`, create a **SAM API** client :
 
 ```yaml
 eight_points_guzzle:
@@ -28,13 +28,41 @@ eight_points_guzzle:
                 verify: false
 ```
 
+### Configure a cache pool
+
+Create a dedicated **SAM** cache, or use any of your existing pools :
+
+In the file `config/services.yaml`, register your cache pool :
+
+```yaml
+# Redis example
+app.cache.adapter.redis.sam:
+    parent: 'cache.adapter.redis'
+    tags:
+        - { name: 'cache.pool', namespace: 'SAM' }
+```
+
+In the file `config/packages/cache.yaml`, define your cache pool :
+
+```yaml
+framework:
+    cache:
+        # Redis example
+        default_redis_provider: "%env(resolve:REDIS_CACHE_DSN)%"
+        pools:
+            cache.sam:
+                adapter: app.cache.adapter.redis.sam
+                public: true
+```
+
 ### Configure sam-client-bundle
 
 In `config/packages/`, create a `idci_sam_client.yaml` file :
 
 ```yaml
 idci_sam_client:
-    guzzle_http_client: 'eight_points_guzzle.client.sam_api'
+    guzzle_http_client_service_alias: 'eight_points_guzzle.client.sam_api'
+    cache_pool_service_alias: 'cache.sam'
     client_id: '%env(string:IDCI_SAM_CLIENT_ID)%'
     client_secret: '%env(string:IDCI_SAM_CLIENT_SECRET)%'
     mode: '%env(string:IDCI_SAM_MODE)%'

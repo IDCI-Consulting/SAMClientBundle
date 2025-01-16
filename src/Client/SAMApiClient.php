@@ -50,9 +50,14 @@ class SAMApiClient
         $this->mode = $mode;
     }
 
-    public function setHttpClient(ClientInterface $httpClient)
+    public function setHttpClient(ClientInterface $httpClient): void
     {
         $this->httpClient = $httpClient;
+    }
+
+    public function setCache(AdapterInterface $cache): void
+    {
+        $this->cache = $cache;
     }
 
     public function getAccessTokenUrl(): string
@@ -636,15 +641,13 @@ class SAMApiClient
         $this->configureJsonPatchDocuments($resolver);
         $resolvedOptions = $resolver->resolve($options);
 
-        dd(json_encode($resolvedOptions['jsonPatchDocuments']));
-
         try {
             $response = $this->httpClient->patch(sprintf('BusinessDeals/%s', $id), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
                 ],
-                'body' => json_encode([]),
+                'body' => json_encode($resolvedOptions['jsonPatchDocuments']),
             ]);
 
             return $this->serializer->deserialize((string) $response->getBody(), BusinessDealApi::class, 'json');

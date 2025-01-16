@@ -2,6 +2,7 @@
 
 namespace IDCI\Bundle\SAMClientBundle;
 
+use IDCI\Bundle\SAMClientBundle\DependencyInjection\Compiler\CachePoolInjectionCompilerPass;
 use IDCI\Bundle\SAMClientBundle\DependencyInjection\Compiler\EightPointsGuzzleClientInjectionCompilerPass;
 use IDCI\Bundle\SAMClientBundle\DependencyInjection\IDCISAMClientExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,6 +22,7 @@ class IDCISAMClientBundle extends AbstractBundle
 
         $container
             ->addCompilerPass(new EightPointsGuzzleClientInjectionCompilerPass())
+            ->addCompilerPass(new CachePoolInjectionCompilerPass())
         ;
     }
 }

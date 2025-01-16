@@ -16,6 +16,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('guzzle_http_client_service_alias')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('cache_pool_service_alias')->defaultValue(null)->cannotBeEmpty()->end()
                 ->scalarNode('client_id')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('client_secret')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('mode')->isRequired()->cannotBeEmpty()->end()

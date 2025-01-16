@@ -18,6 +18,7 @@ class IDCISAMClientExtension extends Extension
         $loader->load('services.yaml');
 
         $container->setParameter(sprintf('%s.guzzle_http_client_service_alias', Configuration::CONFIGURATION_ROOT), $config['guzzle_http_client_service_alias']);
+        $container->setParameter(sprintf('%s.cache_pool_service_alias', Configuration::CONFIGURATION_ROOT), $config['cache_pool_service_alias']);
         $container->setParameter(sprintf('%s.client_secret', Configuration::CONFIGURATION_ROOT), $config['client_secret']);
         $container->setParameter(sprintf('%s.client_id', Configuration::CONFIGURATION_ROOT), $config['client_id']);
         $container->setParameter(sprintf('%s.mode', Configuration::CONFIGURATION_ROOT), $config['mode']);
