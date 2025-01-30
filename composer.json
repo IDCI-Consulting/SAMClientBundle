@@ -12,7 +12,7 @@
             "email": "maeva.grondin@idci-consulting.fr"
         }
     ],
-    "license": "MIT",
+    "license": "CECILL-C",
     "require": {
         "php": "^8.1",
         "symfony/cache": "^6.0",
