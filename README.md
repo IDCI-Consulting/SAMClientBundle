@@ -20,12 +20,7 @@ In the file `config/packages/eight_points_guzzle.yaml`, create a **SAM API** cli
 eight_points_guzzle:
     clients:
         sam_api:
-            base_url: 'https://%env(SAM_HOST)%'
-            options:
-                connect_timeout: '%env(float:DEFAULT_GUZZLE_CONNECT_TIMEOUT)%'
-                read_timeout: '%env(float:DEFAULT_GUZZLE_READ_TIMEOUT)%'
-                timeout: '%env(float:DEFAULT_GUZZLE_TIMEOUT)%'
-                verify: false
+            base_url: 'https://sam-staging.savinsight.com/api/' # PROD = 'https://sam.savinsight.com/api/'
 ```
 
 ### Configure a cache pool
@@ -47,11 +42,9 @@ In the file `config/packages/cache.yaml`, define your cache pool :
 ```yaml
 framework:
     cache:
-        # Redis example
-        default_redis_provider: "%env(resolve:REDIS_CACHE_DSN)%"
+        # ...
         pools:
             cache.sam:
-                adapter: app.cache.adapter.redis.sam
                 public: true
 ```
 
