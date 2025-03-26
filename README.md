@@ -346,3 +346,7 @@ $this->samApiClient->deleteBusinessDealByInternalNumber('internalNumber');
 
 $this->samApiClient->deleteBusinessDealByExternalId('externalId');
 ```
+
+## Support
+
+If needed, you can contact [Maëva](mailto:maeva.grondin@idci-consulting.fr).
