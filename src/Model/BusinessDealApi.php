@@ -7,7 +7,9 @@ use IDCI\Bundle\SAMClientBundle\Model\BusinessDealCarrierApi;
 use IDCI\Bundle\SAMClientBundle\Model\BusinessDealContactApi;
 use IDCI\Bundle\SAMClientBundle\Model\BusinessDealDiagnosticApi;
 use IDCI\Bundle\SAMClientBundle\Model\BusinessDealEstimateApi;
+use IDCI\Bundle\SAMClientBundle\Model\BusinessDealOrderApi;
 use IDCI\Bundle\SAMClientBundle\Model\BusinessDealReceiptApi;
+use IDCI\Bundle\SAMClientBundle\Model\BusinessDealWorkReportApi;
 use IDCI\Bundle\SAMClientBundle\Model\CodeText;
 use IDCI\Bundle\SAMClientBundle\Model\Enum\BusinessDealApiStatus;
 
@@ -39,6 +41,8 @@ class BusinessDealApi
     private ?BusinessDealDiagnosticApi $lastDiagnostic;
     private ?BusinessDealReceiptApi $lastReceipt;
     private ?BusinessDealEstimateApi $lastEstimate;
+    private ?BusinessDealOrderApi $lastOrder;
+    private ?BusinessDealWorkReportApi $lastWorkReport;
     private ?BusinessDealContactApi $contact;
     private ?CodeText $handlingCode;
     private ?CodeText $brandCertification;
@@ -351,6 +355,30 @@ class BusinessDealApi
     public function setLastEstimate(?BusinessDealEstimateApi $lastEstimate): self
     {
         $this->lastEstimate = $lastEstimate;
+
+        return $this;
+    }
+
+    public function getLastOrder(): ?BusinessDealOrderApi
+    {
+        return $this->lastOrder;
+    }
+
+    public function setLastOrder(?BusinessDealOrderApi $lastOrder): self
+    {
+        $this->lastOrder = $lastOrder;
+
+        return $this;
+    }
+
+    public function getLastWorkReport(): ?BusinessDealWorkReportApi
+    {
+        return $this->lastWorkReport;
+    }
+
+    public function setLastWorkReport(?BusinessDealWorkReportApi $lastWorkReport): self
+    {
+        $this->lastWorkReport = $lastWorkReport;
 
         return $this;
     }
