@@ -19,8 +19,8 @@ class BusinessDealApi
     private ?string $internalNumber;
     private ?string $externalId;
     private CodeText $invoicingCode;
-    private CodeText $interventionCode;
-    private CodeText $competenceLevel;
+    private ?CodeText $interventionCode;
+    private ?CodeText $competenceLevel;
     private ?string $brandReference;
     private ?string $productReference;
     private ?string $productSerialNumber;
@@ -29,9 +29,9 @@ class BusinessDealApi
     private ?string $movementSerialNumberReference;
     private ?string $movementReference;
     private ?string $partnerReference;
-    private CodeText $defectComponent;
-    private CodeText $defectReason;
-    private CodeText $customerDecision;
+    private ?CodeText $defectComponent;
+    private ?CodeText $defectReason;
+    private ?CodeText $customerDecision;
     private ?string $expectedDelivery;
     private ?string $expectedWorkshop;
     private ?string $accessCode;
@@ -102,24 +102,24 @@ class BusinessDealApi
         return $this;
     }
 
-    public function getInterventionCode(): CodeText
+    public function getInterventionCode(): ?CodeText
     {
         return $this->interventionCode;
     }
 
-    public function setInterventionCode(CodeText $interventionCode): self
+    public function setInterventionCode(?CodeText $interventionCode): self
     {
         $this->interventionCode = $interventionCode;
 
         return $this;
     }
 
-    public function getCompetenceLevel(): CodeText
+    public function getCompetenceLevel(): ?CodeText
     {
         return $this->competenceLevel;
     }
 
-    public function setCompetenceLevel(CodeText $competenceLevel): self
+    public function setCompetenceLevel(?CodeText $competenceLevel): self
     {
         $this->competenceLevel = $competenceLevel;
 
@@ -162,12 +162,12 @@ class BusinessDealApi
         return $this;
     }
 
-    public function getProductNature(): CodeText
+    public function getProductNature(): ?CodeText
     {
         return $this->productNature;
     }
 
-    public function setProductNature(CodeText $productNature): self
+    public function setProductNature(?CodeText $productNature): self
     {
         $this->productNature = $productNature;
 
@@ -222,36 +222,36 @@ class BusinessDealApi
         return $this;
     }
 
-    public function getDefectComponent(): CodeText
+    public function getDefectComponent(): ?CodeText
     {
         return $this->defectComponent;
     }
 
-    public function setDefectComponent(CodeText $defectComponent): self
+    public function setDefectComponent(?CodeText $defectComponent): self
     {
         $this->defectComponent = $defectComponent;
 
         return $this;
     }
 
-    public function getDefectReason(): CodeText
+    public function getDefectReason(): ?CodeText
     {
         return $this->defectReason;
     }
 
-    public function setDefectReason(CodeText $defectReason): self
+    public function setDefectReason(?CodeText $defectReason): self
     {
         $this->defectReason = $defectReason;
 
         return $this;
     }
 
-    public function getCustomerDecision(): CodeText
+    public function getCustomerDecision(): ?CodeText
     {
         return $this->defectReason;
     }
 
-    public function setCustomerDecision(CodeText $customerDecision): self
+    public function setCustomerDecision(?CodeText $customerDecision): self
     {
         $this->customerDecision = $customerDecision;
 
