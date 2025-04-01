@@ -445,6 +445,8 @@ class SAMApiClient
                     return $value;
                 })
             ->setDefined('accessCode')->setAllowedTypes('accessCode', ['string', 'null'])
+            ->setDefined('quickService')->setAllowedTypes('quickService', ['bool', 'null'])
+            ->setDefined('interventionInvoicingCode')->setAllowedTypes('interventionInvoicingCode', ['string', 'null'])
         ;
     }
 

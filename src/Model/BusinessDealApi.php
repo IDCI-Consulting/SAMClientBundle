@@ -48,6 +48,8 @@ class BusinessDealApi
     private ?CodeText $brandCertification;
     private ?BusinessDealCarrierApi $outboundCarrier;
     private ?string $initialRequestorPartnerSiteReference;
+    private ?bool $quickService;
+    private ?string $interventionInvoicingCode;
 
     public function __construct(?array $businessDealActivities)
     {
@@ -439,6 +441,30 @@ class BusinessDealApi
     public function setInitialRequestorPartnerSiteReference(?string $initialRequestorPartnerSiteReference): self
     {
         $this->initialRequestorPartnerSiteReference = $initialRequestorPartnerSiteReference;
+
+        return $this;
+    }
+
+    public function getQuickService(): ?bool
+    {
+        return $this->quickService;
+    }
+
+    public function setQuickService(?bool $quickService): self
+    {
+        $this->quickService = $quickService;
+
+        return $this;
+    }
+
+    public function getInterventionInvoicingCode(): ?string
+    {
+        return $this->interventionInvoicingCode;
+    }
+
+    public function setInterventionInvoicingCode(?string $interventionInvoicingCode): self
+    {
+        $this->interventionInvoicingCode = $interventionInvoicingCode;
 
         return $this;
     }
