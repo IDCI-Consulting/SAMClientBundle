@@ -307,7 +307,7 @@ class SAMApiClient
             ->setDefined('watchStates')->setAllowedTypes('watchStates', ['array', 'null'])
                 ->setNormalizer('watchStates', function (Options $options, $watchStates) {
                     $watchStatesResolver = (new OptionsResolver())
-                        ->setRequired('printOnEstimate')->setAllowedTypes('printOnEstimate', ['bool'])
+                        ->setRequired('toPrint')->setAllowedTypes('toPrint', ['bool'])
                         ->setRequired('materialReference')->setAllowedTypes('materialReference', ['string'])
                         ->setRequired('productState')->setAllowedTypes('productState', [CreateDiagnosticInputWatchStateProductState::class])
                         ->setDefined('internalComment')->setAllowedTypes('internalComment', ['string'])
