@@ -49,7 +49,7 @@ class BusinessDealApi
     private ?BusinessDealCarrierApi $outboundCarrier;
     private ?string $initialRequestorPartnerSiteReference;
     private ?bool $quickService;
-    private ?string $interventionInvoicingCode;
+    private ?CodeText $interventionInvoicingCode;
 
     public function __construct(?array $businessDealActivities)
     {
@@ -457,12 +457,12 @@ class BusinessDealApi
         return $this;
     }
 
-    public function getInterventionInvoicingCode(): ?string
+    public function getInterventionInvoicingCode(): ?CodeText
     {
         return $this->interventionInvoicingCode;
     }
 
-    public function setInterventionInvoicingCode(?string $interventionInvoicingCode): self
+    public function setInterventionInvoicingCode(?CodeText $interventionInvoicingCode): self
     {
         $this->interventionInvoicingCode = $interventionInvoicingCode;
 
