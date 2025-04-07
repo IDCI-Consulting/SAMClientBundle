@@ -22,6 +22,8 @@ class BusinessDeal
     private ?string $interventionCode;
     private BusinessDealProgress $progress;
     private ?string $accessCode;
+    private ?bool $quickService;
+    private ?string $interventionInvoicingCode;
 
     public function getExternalId(): string
     {
@@ -235,6 +237,30 @@ class BusinessDeal
     public function setAccessCode(?string $accessCode): self
     {
         $this->accessCode = $accessCode;
+
+        return $this;
+    }
+
+    public function getQuickService(): ?bool
+    {
+        return $this->quickService;
+    }
+
+    public function setQuickService(?bool $quickService): self
+    {
+        $this->quickService = $quickService;
+
+        return $this;
+    }
+
+    public function getInterventionInvoicingCode(): ?string
+    {
+        return $this->interventionInvoicingCode;
+    }
+
+    public function setInterventionInvoicingCode(?string $interventionInvoicingCode): self
+    {
+        $this->interventionInvoicingCode = $interventionInvoicingCode;
 
         return $this;
     }

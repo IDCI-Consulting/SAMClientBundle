@@ -6,19 +6,19 @@ use IDCI\Bundle\SAMClientBundle\Model\Enum\CreateDiagnosticInputWatchStateProduc
 
 class CreateDiagnosticInputWatchState
 {
-    private bool $printOnEstimate;
+    private bool $toPrint;
     private ?string $internalComment;
     private ?string $materialReference;
     private CreateDiagnosticInputWatchStateProductState $productState;
 
-    public function getPrintOnEstimate(): bool
+    public function isToPrint(): bool
     {
-        return $this->printOnEstimate;
+        return $this->toPrint;
     }
 
-    public function setPrintOnEstimate(bool $printOnEstimate): self
+    public function setToPrint(bool $toPrint): self
     {
-        $this->printOnEstimate = $printOnEstimate;
+        $this->toPrint = $toPrint;
 
         return $this;
     }

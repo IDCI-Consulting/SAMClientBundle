@@ -4,21 +4,21 @@ namespace IDCI\Bundle\SAMClientBundle\Model;
 
 class CreateDiagnosticInputOperation
 {
-    private bool $printOnEstimate;
+    private bool $toPrint;
     private ?string $internalComment;
     private ?string $materialReference;
     private bool $mandatory;
     private bool $main;
     private ?float $quantity;
 
-    public function getPrintOnEstimate(): bool
+    public function isToPrint(): bool
     {
-        return $this->printOnEstimate;
+        return $this->toPrint;
     }
 
-    public function setPrintOnEstimate(bool $printOnEstimate): self
+    public function setToPrint(bool $toPrint): self
     {
-        $this->printOnEstimate = $printOnEstimate;
+        $this->toPrint = $toPrint;
 
         return $this;
     }
@@ -47,7 +47,7 @@ class CreateDiagnosticInputOperation
         return $this;
     }
 
-    public function getMandatory(): bool
+    public function isMandatory(): bool
     {
         return $this->mandatory;
     }
@@ -59,12 +59,12 @@ class CreateDiagnosticInputOperation
         return $this;
     }
 
-    public function getMain(): bool
+    public function isMain(): bool
     {
         return $this->main;
     }
 
-    public function setMain(): self
+    public function setMain(bool $main): self
     {
         $this->main = $main;
 

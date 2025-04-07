@@ -152,7 +152,7 @@ $this->samApiClient->createDiagnotic(20000, [
     'date' => new \DateTime,
     'watchStates' => [
         [
-            'printOnEstimate' => false,
+            'toPrint' => false,
             'internalComment' => 'Fermoir cassé',
             'materialReference' => 'xxxxxx',
             'productState' => CreateDiagnosticInputWatchStateProductState::Broken,
@@ -160,7 +160,7 @@ $this->samApiClient->createDiagnotic(20000, [
     ],
     'operations' => [
         [
-            'printOnEstimate' => false,
+            'toPrint' => false,
             'internalComment' => 'Remplacement fermoir',
             'materialReference' => 'xxxxxx',
             'mandatory' => true,
@@ -174,7 +174,7 @@ $this->samApiClient->createDiagnosticByInternalNumber('internalNumber', [
     'date' => new \DateTime,
     'watchStates' => [
         [
-            'printOnEstimate' => false,
+            'toPrint' => false,
             'internalComment' => 'Fermoir cassé',
             'materialReference' => 'xxxxxx',
             'productState' => CreateDiagnosticInputWatchStateProductState::Broken,
@@ -182,7 +182,7 @@ $this->samApiClient->createDiagnosticByInternalNumber('internalNumber', [
     ],
     'operations' => [
         [
-            'printOnEstimate' => false,
+            'toPrint' => false,
             'internalComment' => 'Remplacement fermoir',
             'materialReference' => 'xxxxxx',
             'mandatory' => true,
@@ -196,7 +196,7 @@ $this->samApiClient->createDiagnosticByExternalId('externalId', [
     'date' => new \DateTime,
     'watchStates' => [
         [
-            'printOnEstimate' => false,
+            'toPrint' => false,
             'internalComment' => 'Fermoir cassé',
             'materialReference' => 'xxxxxx',
             'productState' => CreateDiagnosticInputWatchStateProductState::Broken,
@@ -204,7 +204,7 @@ $this->samApiClient->createDiagnosticByExternalId('externalId', [
     ],
     'operations' => [
         [
-            'printOnEstimate' => false,
+            'toPrint' => false,
             'internalComment' => 'Remplacement fermoir',
             'materialReference' => 'xxxxxx',
             'mandatory' => true,
@@ -254,6 +254,8 @@ $this->samApiClient->createBusinessDeal([
         'numberDaysWaitingParts' => 2,
     ],
     'accessCode' => 'trackingCode',
+    'quickService' => true,
+    'interventionInvoicingCode' => '000',
 ]);
 ```
 
@@ -276,6 +278,8 @@ $this->samApiClient->createBusinessDeal([
 | interventionCode                     | string, null                    |
 | progress                             | BusinessDealProgress, array     |
 | accessCode                           | string, null                    |
+| quickService                         | bool, null                      |
+| interventionInvoicingCode            | string, null                    |
 
 #### Get business deal
 
@@ -346,3 +350,7 @@ $this->samApiClient->deleteBusinessDealByInternalNumber('internalNumber');
 
 $this->samApiClient->deleteBusinessDealByExternalId('externalId');
 ```
+
+## Support
+
+If needed, you can contact [Maëva](mailto:maeva.grondin@idci-consulting.fr).
