@@ -250,7 +250,7 @@ class BusinessDealApi
 
     public function getCustomerDecision(): ?CodeText
     {
-        return $this->defectReason;
+        return $this->customerDecision;
     }
 
     public function setCustomerDecision(?CodeText $customerDecision): self
