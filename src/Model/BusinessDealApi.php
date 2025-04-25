@@ -426,7 +426,7 @@ class BusinessDealApi
         return $this->outboundCarrier;
     }
 
-    public function setOutboundCarrier(?BusinessDealCarrier $outboundCarrier): self
+    public function setOutboundCarrier(?BusinessDealCarrierApi $outboundCarrier): self
     {
         $this->outboundCarrier = $outboundCarrier;
 
