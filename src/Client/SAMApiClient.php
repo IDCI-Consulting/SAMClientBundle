@@ -10,6 +10,7 @@ use IDCI\Bundle\SAMClientBundle\Model\BusinessDealApi;
 use IDCI\Bundle\SAMClientBundle\Model\BusinessDealPayload;
 use IDCI\Bundle\SAMClientBundle\Model\BusinessDealProgress;
 use IDCI\Bundle\SAMClientBundle\Model\BusinessDealsUpdatedSinceApi;
+use IDCI\Bundle\SAMClientBundle\Model\CreateDiagnosticInputWatchState;
 use IDCI\Bundle\SAMClientBundle\Model\Enum\CreateDiagnosticInputWatchStateProductState;
 use IDCI\Bundle\SAMClientBundle\Model\Enum\JsonPatchDocumentOperation;
 use IDCI\Bundle\SAMClientBundle\Model\Enum\UpdateActivityInputStatus;
@@ -60,6 +61,11 @@ class SAMApiClient
         $this->cache = $cache;
     }
 
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
+
     public function getAccessTokenUrl(): string
     {
         if (!in_array($this->mode, [self::MODE_LIVE, self::MODE_STAGING])) {
@@ -85,7 +91,7 @@ class SAMApiClient
         $response = null;
 
         try {
-            $response = $this->httpClient->post($this->getAccessTokenUrl(), [
+            $response = $this->httpClient->request('POST', $this->getAccessTokenUrl(), [
                 'json' => [
                     'audience' => 'https://api.sam.savinsight.com',
                     'grant_type' => 'client_credentials',
@@ -146,7 +152,7 @@ class SAMApiClient
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->post(sprintf('BusinessDeals/%s/activities/%s', $id, $activityCode), [
+            $response = $this->httpClient->request('POST', sprintf('BusinessDeals/%s/activities/%s', $id, $activityCode), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -169,7 +175,7 @@ class SAMApiClient
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->post(sprintf('BusinessDeals/ByInternalNumber/%s/activities/%s', $internalNumber, $activityCode), [
+            $response = $this->httpClient->request('POST', sprintf('BusinessDeals/ByInternalNumber/%s/activities/%s', $internalNumber, $activityCode), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -192,7 +198,7 @@ class SAMApiClient
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->post(sprintf('BusinessDeals/ByExternalId/%s/activities/%s', $externalId, $activityCode), [
+            $response = $this->httpClient->request('POST', sprintf('BusinessDeals/ByExternalId/%s/activities/%s', $externalId, $activityCode), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -231,7 +237,7 @@ class SAMApiClient
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->put(sprintf('BusinessDeals/%s/activities/%s', $id, $activityCode), [
+            $response = $this->httpClient->request('PUT', sprintf('BusinessDeals/%s/activities/%s', $id, $activityCode), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -254,7 +260,7 @@ class SAMApiClient
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->put(sprintf('BusinessDeals/ByInternalNumber/%s/activities/%s', $internalNumber, $activityCode), [
+            $response = $this->httpClient->request('PUT', sprintf('BusinessDeals/ByInternalNumber/%s/activities/%s', $internalNumber, $activityCode), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -277,7 +283,7 @@ class SAMApiClient
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->put(sprintf('BusinessDeals/ByExternalId/%s/activities/%s', $externalId, $activityCode), [
+            $response = $this->httpClient->request('PUT', sprintf('BusinessDeals/ByExternalId/%s/activities/%s', $externalId, $activityCode), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -318,7 +324,7 @@ class SAMApiClient
                             $watchState = json_decode($this->serializer->serialize($watchState, 'json'), true);
                         }
 
-                        $watchState = $watchStateResolver->resolve($watchState);
+                        $watchState = $watchStatesResolver->resolve($watchState);
                     }
 
                     return $watchStates;
@@ -334,7 +340,7 @@ class SAMApiClient
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->post(sprintf('BusinessDeals/%s/diagnostics', $id), [
+            $response = $this->httpClient->request('POST', sprintf('BusinessDeals/%s/diagnostics', $id), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -357,7 +363,7 @@ class SAMApiClient
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->post(sprintf('BusinessDeals/ByInternalNumber/%s/diagnostics', $internalNumber), [
+            $response = $this->httpClient->request('POST', sprintf('BusinessDeals/ByInternalNumber/%s/diagnostics', $internalNumber), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -380,7 +386,7 @@ class SAMApiClient
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->post(sprintf('BusinessDeals/ByExternalId/%s/diagnostics', $externalId), [
+            $response = $this->httpClient->request('POST', sprintf('BusinessDeals/ByExternalId/%s/diagnostics', $externalId), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -457,7 +463,7 @@ class SAMApiClient
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->post('BusinessDeals', [
+            $response = $this->httpClient->request('POST', 'BusinessDeals', [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -476,7 +482,7 @@ class SAMApiClient
     public function importBusinessDeal(string $importDataTemplateId): null
     {
         try {
-            $response = $this->httpClient->put(sprintf('BusinessDeals/csv/%s', $importDataTemplateId), [
+            $response = $this->httpClient->request('PUT', sprintf('BusinessDeals/csv/%s', $importDataTemplateId), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                 ],
@@ -491,7 +497,7 @@ class SAMApiClient
     public function deleteBusinessDeal(string $id): null
     {
         try {
-            $response = $this->httpClient->delete(sprintf('BusinessDeals/%s', $id), [
+            $response = $this->httpClient->request('DELETE', sprintf('BusinessDeals/%s', $id), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                 ],
@@ -506,7 +512,7 @@ class SAMApiClient
     public function deleteBusinessDealByInternalNumber(string $internalNumber): null
     {
         try {
-            $response = $this->httpClient->delete(sprintf('BusinessDeals/ByInternalNumber/%s', $internalNumber), [
+            $response = $this->httpClient->request('DELETE', sprintf('BusinessDeals/ByInternalNumber/%s', $internalNumber), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                 ],
@@ -521,7 +527,7 @@ class SAMApiClient
     public function deleteBusinessDealByExternalId(string $externalId): null
     {
         try {
-            $response = $this->httpClient->delete(sprintf('BusinessDeals/ByExternalId/%s', $externalId), [
+            $response = $this->httpClient->request('DELETE', sprintf('BusinessDeals/ByExternalId/%s', $externalId), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                 ],
@@ -536,7 +542,7 @@ class SAMApiClient
     public function getBusinessDeal(string $id): ?BusinessDealApi
     {
         try {
-            $response = $this->httpClient->get(sprintf('BusinessDeals/%s', $id), [
+            $response = $this->httpClient->request('GET', sprintf('BusinessDeals/%s', $id), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                 ],
@@ -553,7 +559,7 @@ class SAMApiClient
     public function getBusinessDealByInternalNumber(string $internalNumber): ?BusinessDealApi
     {
         try {
-            $response = $this->httpClient->get(sprintf('BusinessDeals/ByInternalNumber/%s', $internalNumber), [
+            $response = $this->httpClient->request('GET', sprintf('BusinessDeals/ByInternalNumber/%s', $internalNumber), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                 ],
@@ -570,7 +576,7 @@ class SAMApiClient
     public function getBusinessDealByExternalId(string $externalId): ?BusinessDealApi
     {
         try {
-            $response = $this->httpClient->get(sprintf('BusinessDeals/ByExternalId/%s', $externalId), [
+            $response = $this->httpClient->request('GET', sprintf('BusinessDeals/ByExternalId/%s', $externalId), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                 ],
@@ -591,7 +597,7 @@ class SAMApiClient
         }
 
         try {
-            $response = $this->httpClient->get(sprintf('BusinessDeals/ModifiedSince/%s', $modifiedSince), [
+            $response = $this->httpClient->request('GET', sprintf('BusinessDeals/ModifiedSince/%s', $modifiedSince), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                 ],
@@ -644,7 +650,7 @@ class SAMApiClient
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->patch(sprintf('BusinessDeals/%s', $id), [
+            $response = $this->httpClient->request('PATCH', sprintf('BusinessDeals/%s', $id), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -663,11 +669,11 @@ class SAMApiClient
     public function updateBusinessDealByInternalNumber(string $internalNumber, array $options): ?BusinessDealApi
     {
         $resolver = new OptionsResolver();
-        $this->configureJsonPatchDocument($resolver);
+        $this->configureJsonPatchDocuments($resolver);
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->patch(sprintf('BusinessDeals/ByInternalNumber/%s', $internalNumber), [
+            $response = $this->httpClient->request('PATCH', sprintf('BusinessDeals/ByInternalNumber/%s', $internalNumber), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',
@@ -686,11 +692,11 @@ class SAMApiClient
     public function updateBusinessDealByExternalId(string $externalId, array $options): ?BusinessDealApi
     {
         $resolver = new OptionsResolver();
-        $this->configureJsonPatchDocument($resolver);
+        $this->configureJsonPatchDocuments($resolver);
         $resolvedOptions = $resolver->resolve($options);
 
         try {
-            $response = $this->httpClient->patch(sprintf('BusinessDeals/ByExternalId/%s', $externalId), [
+            $response = $this->httpClient->request('PATCH', sprintf('BusinessDeals/ByExternalId/%s', $externalId), [
                 'headers' => [
                     'Authorization' => sprintf('Bearer %s', $this->getAccessToken()['access_token']),
                     'Content-Type' => 'application/json',

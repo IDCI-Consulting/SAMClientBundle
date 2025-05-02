@@ -66,7 +66,7 @@ class BusinessDeal
         return $this->initialRequestorPartnerSiteReference;
     }
 
-    public function setInitialRequestorPartnerSiteReference(?string $initialRequestorPartnerReference): self
+    public function setInitialRequestorPartnerSiteReference(?string $initialRequestorPartnerSiteReference): self
     {
         $this->initialRequestorPartnerSiteReference = $initialRequestorPartnerSiteReference;
 
