@@ -6,10 +6,10 @@ class BusinessDealReceiptApi
 {
     private int $id;
     private string $date;
-    private ?array $components;
-    private ?array $comments;
+    private ?array $components = null;
+    private ?array $comments = null;
     private int $index;
-    private ?string $customerAddressText;
+    private ?string $customerAddressText = null;
     private CodeText $language;
 
     public function __construct(?array $components, ?array $comments)

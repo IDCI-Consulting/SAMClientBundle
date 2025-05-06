@@ -6,8 +6,8 @@ class BusinessDealDiagnosticApi
 {
     private int $id;
     private string $date;
-    private ?array $watchStates;
-    private ?array $operations;
+    private ?array $watchStates = null;
+    private ?array $operations = null;
     private int $index;
 
     public function __construct(?array $watchStates, ?array $operations, int $index)

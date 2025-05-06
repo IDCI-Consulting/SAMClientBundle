@@ -5,9 +5,9 @@ namespace IDCI\Bundle\SAMClientBundle\Model;
 class BusinessDealContactApi
 {
     private int $id;
-    private ?string $firstName;
-    private ?string $lastName;
-    private ?string $email;
+    private ?string $firstName = null;
+    private ?string $lastName = null;
+    private ?string $email = null;
 
     public function getId(): int
     {

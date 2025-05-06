@@ -7,9 +7,9 @@ use IDCI\Bundle\SAMClientBundle\Model\Enum\JsonPatchDocumentOperation;
 class JsonPatchDocument
 {
     private JsonPatchDocumentOperation $op;
-    private ?string $path;
+    private ?string $path = null;
     private mixed $value;
-    private ?string $from;
+    private ?string $from = null;
 
     public function getOp(): JsonPatchDocumentOperation
     {

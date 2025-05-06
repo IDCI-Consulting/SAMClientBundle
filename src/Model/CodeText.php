@@ -4,8 +4,8 @@ namespace IDCI\Bundle\SAMClientBundle\Model;
 
 class CodeText
 {
-    private ?string $code;
-    private ?string $text;
+    private ?string $code = null;
+    private ?string $text = null;
 
     public function getCode(): ?string
     {

@@ -5,11 +5,11 @@ namespace IDCI\Bundle\SAMClientBundle\Model;
 class CreateDiagnosticInputOperation
 {
     private bool $toPrint;
-    private ?string $internalComment;
-    private ?string $materialReference;
+    private ?string $internalComment = null;
+    private ?string $materialReference = null;
     private bool $mandatory;
     private bool $main;
-    private ?float $quantity;
+    private ?float $quantity = null;
 
     public function isToPrint(): bool
     {

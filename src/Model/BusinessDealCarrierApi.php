@@ -4,9 +4,9 @@ namespace IDCI\Bundle\SAMClientBundle\Model;
 
 class BusinessDealCarrierApi
 {
-    private ?string $carrierReference;
-    private ?string $tracking;
-    private ?string $trackingUrl;
+    private ?string $carrierReference = null;
+    private ?string $tracking = null;
+    private ?string $trackingUrl = null;
 
     public function getCarrierReference(): ?string
     {

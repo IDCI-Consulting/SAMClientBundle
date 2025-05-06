@@ -5,8 +5,8 @@ namespace IDCI\Bundle\SAMClientBundle\Model;
 class ActivityUpdatedApi
 {
     private int $id;
-    private ?string $internalNumber;
-    private ?string $externalId;
+    private ?string $internalNumber = null;
+    private ?string $externalId = null;
     private BusinessDealActivityApi $businessDealActivity;
 
     public function getId(): int

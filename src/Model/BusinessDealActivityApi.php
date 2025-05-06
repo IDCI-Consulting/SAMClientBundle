@@ -6,7 +6,7 @@ class BusinessDealActivityApi
 {
     private CodeText $activity;
     private string $startDate;
-    private ?string $endDate;
+    private ?string $endDate = null;
     private string $status;
 
     public function getActivity(): CodeText

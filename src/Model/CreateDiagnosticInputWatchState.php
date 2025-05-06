@@ -7,8 +7,8 @@ use IDCI\Bundle\SAMClientBundle\Model\Enum\CreateDiagnosticInputWatchStateProduc
 class CreateDiagnosticInputWatchState
 {
     private bool $toPrint;
-    private ?string $internalComment;
-    private ?string $materialReference;
+    private ?string $internalComment = null;
+    private ?string $materialReference = null;
     private CreateDiagnosticInputWatchStateProductState $productState;
 
     public function isToPrint(): bool

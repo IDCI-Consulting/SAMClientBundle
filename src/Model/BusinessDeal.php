@@ -6,24 +6,24 @@ class BusinessDeal
 {
     private string $externalId;
     private string $partnerReference;
-    private ?string $partnerSiteReference;
-    private ?string $initialRequestorPartnerSiteReference;
-    private ?string $initialRequestorPartnerReference;
+    private ?string $partnerSiteReference = null;
+    private ?string $initialRequestorPartnerSiteReference = null;
+    private ?string $initialRequestorPartnerReference = null;
     private string $brandReference;
-    private ?string $invoicingCode;
-    private ?string $internalNumber;
-    private ?string $productNature;
-    private ?string $productReference;
-    private ?string $productSerialNumber;
-    private ?string $externalNumber;
-    private ?string $batchReference;
-    private ?string $movementSerialNumberReference;
-    private ?string $movementReference;
-    private ?string $interventionCode;
+    private ?string $invoicingCode = null;
+    private ?string $internalNumber = null;
+    private ?string $productNature = null;
+    private ?string $productReference = null;
+    private ?string $productSerialNumber = null;
+    private ?string $externalNumber = null;
+    private ?string $batchReference = null;
+    private ?string $movementSerialNumberReference = null;
+    private ?string $movementReference = null;
+    private ?string $interventionCode = null;
     private BusinessDealProgress $progress;
-    private ?string $accessCode;
-    private ?bool $quickService;
-    private ?string $interventionInvoicingCode;
+    private ?string $accessCode = null;
+    private ?bool $quickService = null;
+    private ?string $interventionInvoicingCode = null;
 
     public function getExternalId(): string
     {

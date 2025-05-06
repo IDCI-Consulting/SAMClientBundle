@@ -4,7 +4,7 @@ namespace IDCI\Bundle\SAMClientBundle\Model;
 
 class BusinessDealsUpdatedSinceApi
 {
-    private ?array $businessDeals;
+    private ?array $businessDeals = null;
 
     public function __construct(?array $businessDeals)
     {

@@ -5,12 +5,12 @@ namespace IDCI\Bundle\SAMClientBundle\Model;
 class BusinessDealProgress
 {
     private string $receptionDate;
-    private ?string $estimateDate;
-    private ?string $expectedDeliveryDate;
-    private ?string $workStartDate;
-    private ?string $workEndDate;
-    private ?string $deliveryDate;
-    private ?int $numberDaysWaitingParts;
+    private ?string $estimateDate = null;
+    private ?string $expectedDeliveryDate = null;
+    private ?string $workStartDate = null;
+    private ?string $workEndDate = null;
+    private ?string $deliveryDate = null;
+    private ?int $numberDaysWaitingParts = null;
 
     public function getReceptionDate(): string
     {

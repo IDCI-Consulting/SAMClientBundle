@@ -6,12 +6,12 @@ class BusinessDealWorkReportApi
 {
     private int $id;
     private string $date;
-    private ?array $watchStates;
-    private ?array $operations;
+    private ?array $watchStates = null;
+    private ?array $operations = null;
     private int $index;
-    private ?bool $taxIncluded;
-    private ?float $totalAmount;
-    private ?string $customerAddressText;
+    private ?bool $taxIncluded = null;
+    private ?float $totalAmount = null;
+    private ?string $customerAddressText = null;
     private CodeText $language;
     private CodeText $currency;
 
