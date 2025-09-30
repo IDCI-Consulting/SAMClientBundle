@@ -660,7 +660,7 @@ class SAMApiClient
 
             return $this->serializer->deserialize((string) $response->getBody(), BusinessDealApi::class, 'json');
         } catch (RequestException $e) {
-            $this->logRequestException($e, $resolvedOptions);
+            $this->logRequestException($e, $resolvedOptions['jsonPatchDocuments']);
         }
 
         return null;
@@ -683,7 +683,7 @@ class SAMApiClient
 
             return $this->serializer->deserialize((string) $response->getBody(), BusinessDealApi::class, 'json');
         } catch (RequestException $e) {
-            $this->logRequestException($e, $resolvedOptions);
+            $this->logRequestException($e, $resolvedOptions['jsonPatchDocuments']);
         }
 
         return null;
@@ -706,7 +706,7 @@ class SAMApiClient
 
             return $this->serializer->deserialize((string) $response->getBody(), BusinessDealApi::class, 'json');
         } catch (RequestException $e) {
-            $this->logRequestException($e, $resolvedOptions);
+            $this->logRequestException($e, $resolvedOptions['jsonPatchDocuments']);
         }
 
         return null;
