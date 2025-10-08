@@ -29,6 +29,7 @@ class BusinessDealApi
     private ?string $movementSerialNumberReference = null;
     private ?string $movementReference = null;
     private ?string $partnerReference = null;
+    private ?string $externalNumber = null;
     private ?CodeText $defectComponent = null;
     private ?CodeText $defectReason = null;
     private ?CodeText $customerDecision = null;
@@ -220,6 +221,18 @@ class BusinessDealApi
     public function setPartnerReference(?string $partnerReference): self
     {
         $this->partnerReference = $partnerReference;
+
+        return $this;
+    }
+
+    public function getExternalNumber(): ?string
+    {
+        return $this->externalNumber;
+    }
+
+    public function setExternalNumber(?string $externalNumber): self
+    {
+        $this->externalNumber = $externalNumber;
 
         return $this;
     }
