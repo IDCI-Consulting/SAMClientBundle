@@ -453,6 +453,7 @@ class SAMApiClient
             ->setDefined('accessCode')->setAllowedTypes('accessCode', ['string', 'null'])
             ->setDefined('quickService')->setAllowedTypes('quickService', ['bool', 'null'])
             ->setDefined('interventionInvoicingCode')->setAllowedTypes('interventionInvoicingCode', ['string', 'null'])
+            ->setDefined('customerAddressText')->setAllowedTypes('customerAddressText', ['string', 'null'])
         ;
     }
 

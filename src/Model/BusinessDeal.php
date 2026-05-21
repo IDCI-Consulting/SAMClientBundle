@@ -24,6 +24,7 @@ class BusinessDeal
     private ?string $accessCode = null;
     private ?bool $quickService = null;
     private ?string $interventionInvoicingCode = null;
+    private ?string $customerAddressText = null;
 
     public function getExternalId(): string
     {
@@ -261,6 +262,18 @@ class BusinessDeal
     public function setInterventionInvoicingCode(?string $interventionInvoicingCode): self
     {
         $this->interventionInvoicingCode = $interventionInvoicingCode;
+
+        return $this;
+    }
+
+    public function getCustomerAddressText(): ?string
+    {
+        return $this->customerAddressText;
+    }
+
+    public function setCustomerAddressText(?string $customerAddressText): self
+    {
+        $this->customerAddressText = $customerAddressText;
 
         return $this;
     }
