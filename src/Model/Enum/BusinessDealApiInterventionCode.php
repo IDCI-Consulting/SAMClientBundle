@@ -36,25 +36,25 @@ enum BusinessDealApiInterventionCode: string
         return $this->value;
     }
 
-    public static function fromCode(string $code) : self {
-
-        foreach(self::cases() as $enum){
-            if($enum->code() === $code){
+    public static function fromCode(string $code): self
+    {
+        foreach (self::cases() as $enum) {
+            if ($enum->code() === $code) {
                 return $enum;
             }
         }
 
-        throw new \Exception("Not a valid code");
+        throw new \Exception('Not a valid code');
     }
 
-    public static function fromText(string $text) : self {
-
-        foreach(self::cases() as $enum){
-            if($enum->text() === $text){
+    public static function fromText(string $text): self
+    {
+        foreach (self::cases() as $enum) {
+            if ($enum->text() === $text) {
                 return $enum;
             }
         }
 
-        throw new \Exception("Not a valid text");
+        throw new \Exception('Not a valid text');
     }
 }

@@ -2,15 +2,6 @@
 
 namespace IDCI\Bundle\SAMClientBundle\Model;
 
-use IDCI\Bundle\SAMClientBundle\Model\BusinessDealActivityApi;
-use IDCI\Bundle\SAMClientBundle\Model\BusinessDealCarrierApi;
-use IDCI\Bundle\SAMClientBundle\Model\BusinessDealContactApi;
-use IDCI\Bundle\SAMClientBundle\Model\BusinessDealDiagnosticApi;
-use IDCI\Bundle\SAMClientBundle\Model\BusinessDealEstimateApi;
-use IDCI\Bundle\SAMClientBundle\Model\BusinessDealOrderApi;
-use IDCI\Bundle\SAMClientBundle\Model\BusinessDealReceiptApi;
-use IDCI\Bundle\SAMClientBundle\Model\BusinessDealWorkReportApi;
-use IDCI\Bundle\SAMClientBundle\Model\CodeText;
 use IDCI\Bundle\SAMClientBundle\Model\Enum\BusinessDealApiStatus;
 
 class BusinessDealApi

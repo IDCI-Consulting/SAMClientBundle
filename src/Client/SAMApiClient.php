@@ -41,7 +41,7 @@ class SAMApiClient
         SerializerInterface $serializer,
         string $clientId,
         string $clientSecret,
-        string $mode
+        string $mode,
     ) {
         $this->logger = $logger;
         $this->cache = $cache;
